@@ -167,13 +167,13 @@ sw_categories:
       readable_title: Streamline CLI Tools
       tests_and_status:
       - ubuntu:latest: passed
+    swift:
+      readable_title: Swift
+      tests_and_status: []
     sysbox:
       readable_title: Sysbox
       tests_and_status:
       - ubuntu:latest: passed
-    swift:
-      readable_title: Swift
-      tests_and_status: []
     terraform:
       readable_title: Terraform
       tests_and_status:
