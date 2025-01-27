@@ -71,7 +71,7 @@ For Debian based distributions (including Ubuntu) run:
 
 ```bash { target="ubuntu:latest" }
 sudo apt update
-sudo apt install python3-pip python-is-python3 -y
+sudo apt install python3-pip python-is-python3 python3-venv -y
 ```
 
 ## Install the Telemetry Solution
@@ -84,21 +84,17 @@ git clone https://git.gitlab.arm.com/telemetry-solution/telemetry-solution.git
 
 2. Install the `topdown-tool` executable:
 
-Install `topdown-tool` in `/usr/local/bin` using:
+Install `topdown-tool` in `/usr/local/bin` using a virtual environment:
+
+```bash
+python3 -m venv topdown-venv
+source topdown-venv/bin/activate
+```
 
 ```bash
 cd telemetry-solution/tools/topdown_tool
 sudo pip3 install -e .
 ```
-
-{{% notice Note %}}
-If you are getting errors on the environment being externally managed, try creating a virtual environment.
-```bash
-sudo apt install python3-venv -y
-python3 -m venv topdown-venv
-source topdown-venv/bin/activate
-```
-{{% /notice %}}
 
 3. Confirm you can run `top-down` using the `version` command:
 
