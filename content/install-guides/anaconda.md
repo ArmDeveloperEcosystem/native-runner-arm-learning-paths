@@ -14,9 +14,13 @@ official_docs: https://docs.anaconda.com/
 test_images:
 - ubuntu:latest
 test_link: null
+
 test_maintenance: true
+
+# to be removed
 test_status:
 - passed
+#
 title: Anaconda
 tool_install: true
 weight: 1
@@ -50,7 +54,7 @@ The installer requires some desktop related libraries. The dependencies can be m
 
 For Ubuntu/Debian, run the command:
 
-```console
+```bash
 sudo apt update
 sudo apt install xfce4 -y
 ```
