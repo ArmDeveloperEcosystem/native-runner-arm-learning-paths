@@ -91,7 +91,7 @@ sudo apt install cpu-checker -y
 To check if KVM is available run:
 
 ```console
-kvm-ok
+sudo kvm-ok
 ```
 
 If KVM is available the output will be similar to:

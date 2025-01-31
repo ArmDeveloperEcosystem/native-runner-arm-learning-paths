@@ -86,7 +86,7 @@ def write_commands_to_file(test_cmd_filename, test):
     # - An environment variable is specified
     cmd_args = {
                 "env_source":"source",
-                "cwd":"cd",
+                "cwd":"cd ",
                 "env":"export"
                 }
     for cmd_arg in cmd_args.keys():
@@ -163,7 +163,8 @@ def check(json_file, start, stop, md_article):
 
                 test_target = test.get("target")
                 if test_target and test_target != test_image:
-                    pass
+                    bar(skipped=True)
+                    continue
                 elif not test_target:
                     pass
                 elif test_target:
@@ -184,12 +185,25 @@ def check(json_file, start, stop, md_article):
                 test_type = test["type"]
                 # Check type
                 if test_type == "bash":
-                    # chmod cmd file
-                    run_command = [f"chmod +x {test_cmd_filename}"]
-                    subprocess.run(run_command, shell=True, capture_output=True)
-                    logging.debug(run_command)
-                    # execute file as is with bash
-                    run_command = [f"bash ./{test_cmd_filename}"]
+                    if "ubuntu" in test_image:
+                        # chmod cmd file
+                        run_command = [f"chmod +x {test_cmd_filename}"]
+                        subprocess.run(run_command, shell=True, capture_output=True)
+                        logging.debug(run_command)
+                        # execute file as is with bash
+                        run_command = [f"bash ./{test_cmd_filename}"]
+                    elif "fedora" in test_image:
+                        container_name = init_container(i_img=n_image, img=test_image)
+                        logging.info(f"{container_name} initialized")
+                        # copy files to docker
+                        docker_cmd = [f"docker cp {test_cmd_filename} test_{n_image}:/home/{username}/"]
+                        subprocess.run(docker_cmd, shell=True, capture_output=True)
+                        logging.debug(docker_cmd)
+                        run_command = [f"docker exec -u {username} -w /home/{username} test_{n_image} bash {test_cmd_filename}"]
+                    else:
+                        logging.debug(f"Image {test_image} not supported for testing. Contact the maintainers if you think this is a mistake.")
+                        bar(skipped=True)
+                        continue
                 elif test_type == "fvp":
                     # Start instance for image
                     if start:
@@ -215,7 +229,7 @@ def check(json_file, start, stop, md_article):
                                                     {ethos_u65} NON_INTERACTIVE=1 --name test_fvp flebeau/arm-corstone-300-fvp"
                     )
                 else:
-                    logging.info(f"Type '{test_type}' not supported for testing. Contact the maintainers if you think this is a mistake.")
+                    logging.debug(f"Type '{test_type}' not supported for testing. Contact the maintainers if you think this is a mistake.")
                     bar(skipped=True)
                     continue
 
